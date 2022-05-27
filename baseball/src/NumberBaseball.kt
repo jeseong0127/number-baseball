@@ -14,10 +14,11 @@ fun main() {
             val numbers = getNumbersFromUser()
 
             // 비교하기
-            val resultNumber = compareNumbers(generatedNumber, numbers)
+            val strikeAndBall = countStrikeAndBall(generatedNumber, numbers)
+            println("strike:" + strikeAndBall[BaseBall.STRIKE.ordinal] + " ball: " + strikeAndBall[BaseBall.BALL.ordinal])
 
             // 결과값에 따라 반복유무 체크
-            if (countStrikeAndBall(resultNumber))
+            if (strikeAndBall[BaseBall.STRIKE.ordinal] == ARRAY_SIZE)
                 break
         }
 
@@ -45,7 +46,6 @@ private fun setNumbers(numbers: IntArray, index: Int) {
     }
 }
 
-
 private fun isInsertable(numbers: IntArray, index: Int, number: Int): Boolean {
     var isInsertable = true
     for (i in 0 until index) {
@@ -66,25 +66,17 @@ fun getNumbersFromUser(): IntArray {
     return userNumbers
 }
 
-fun compareNumbers(auto: IntArray, user: IntArray): IntArray {
-    val result = IntArray(2)
-    for (i in 0..2) {
-        if (auto[i] == user[i])
-            result[0]++
-        else if (user.contains(auto[i]))
-            result[1]++
+fun countStrikeAndBall(generatedNumbers: IntArray, numbers: IntArray): IntArray {
+    val strikeAndBall = IntArray(2)
+
+    repeat(ARRAY_SIZE) { index ->
+        if (generatedNumbers[index] == numbers[index])
+            strikeAndBall[BaseBall.STRIKE.ordinal]++
+        else if (numbers.contains(generatedNumbers[index]))
+            strikeAndBall[BaseBall.BALL.ordinal]++
     }
-    return result
-}
 
-fun countStrikeAndBall(resultBall: IntArray): Boolean {
-    var result = false
-    println("strike:" + resultBall[0] + " ball: " + resultBall[1])
-
-    if (resultBall[0] == 3)
-        result = true
-
-    return result
+    return strikeAndBall
 }
 
 fun isCoinInserted(): Boolean {
