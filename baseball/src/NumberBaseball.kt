@@ -1,6 +1,8 @@
 import java.util.*
 
-val scanner = Scanner(System.`in`)
+private val scanner = Scanner(System.`in`)
+
+private const val ARRAY_SIZE = 3
 
 fun main() {
     while (true) {
@@ -11,8 +13,11 @@ fun main() {
             // 사용자 입력 받기
             val numbers = getNumbersFromUser()
 
-            // 비교하기 && 결과값에 따라 반복유무 체크
-            if (compareNumbers(generatedNumber, numbers))
+            // 비교하기
+            val resultNumber = compareNumbers(generatedNumber, numbers)
+
+            // 결과값에 따라 반복유무 체크
+            if (countStrikeAndBall(resultNumber))
                 break
         }
 
@@ -23,13 +28,33 @@ fun main() {
 }
 
 fun generateRandomNumbers(): IntArray {
-    val numbers = IntArray(3)
-    for (i in 0..2) {
-        numbers[i] = (1..9).random()
-        print(numbers[i])
+    val numbers = IntArray(ARRAY_SIZE)
+    repeat(ARRAY_SIZE) { index ->
+        setNumbers(numbers, index)
     }
-    println()
     return numbers
+}
+
+private fun setNumbers(numbers: IntArray, index: Int) {
+    while (true) {
+        val number = (1..9).random()
+        if (isInsertable(numbers, index, number)) {
+            numbers[index] = number
+            return
+        }
+    }
+}
+
+
+private fun isInsertable(numbers: IntArray, index: Int, number: Int): Boolean {
+    var isInsertable = true
+    for (i in 0 until index) {
+        if (numbers[i] == number) {
+            isInsertable = false
+            break
+        }
+    }
+    return isInsertable
 }
 
 fun getNumbersFromUser(): IntArray {
@@ -41,19 +66,25 @@ fun getNumbersFromUser(): IntArray {
     return userNumbers
 }
 
-fun compareNumbers(auto: IntArray, user: IntArray): Boolean {
-    var strike = 0
-    var ball = 0
-
+fun compareNumbers(auto: IntArray, user: IntArray): IntArray {
+    val result = IntArray(2)
     for (i in 0..2) {
         if (auto[i] == user[i])
-            strike++
+            result[0]++
         else if (user.contains(auto[i]))
-            ball++
+            result[1]++
     }
-    println("strike: $strike ball: $ball")
+    return result
+}
 
-    return strike == 3
+fun countStrikeAndBall(resultBall: IntArray): Boolean {
+    var result = false
+    println("strike:" + resultBall[0] + " ball: " + resultBall[1])
+
+    if (resultBall[0] == 3)
+        result = true
+
+    return result
 }
 
 fun isCoinInserted(): Boolean {
