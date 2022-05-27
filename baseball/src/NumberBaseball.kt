@@ -1,6 +1,8 @@
 import java.util.*
 
-val scanner = Scanner(System.`in`)
+private val scanner = Scanner(System.`in`)
+
+private const val ARRAY_SIZE = 3
 
 fun main() {
     while (true) {
@@ -26,13 +28,33 @@ fun main() {
 }
 
 fun generateRandomNumbers(): IntArray {
-    val numbers = IntArray(3)
-    for (i in 0..2) {
-        numbers[i] = (1..9).random()
-        print(numbers[i])
+    val numbers = IntArray(ARRAY_SIZE)
+    repeat(ARRAY_SIZE) { index ->
+        setNumbers(numbers, index)
     }
-    println()
     return numbers
+}
+
+private fun setNumbers(numbers: IntArray, index: Int) {
+    while (true) {
+        val number = (1..9).random()
+        if (isInsertable(numbers, index, number)) {
+            numbers[index] = number
+            return
+        }
+    }
+}
+
+
+private fun isInsertable(numbers: IntArray, index: Int, number: Int): Boolean {
+    var isInsertable = true
+    for (i in 0 until index) {
+        if (numbers[i] == number) {
+            isInsertable = false
+            break
+        }
+    }
+    return isInsertable
 }
 
 fun getNumbersFromUser(): IntArray {
