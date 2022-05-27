@@ -32,19 +32,23 @@ fun generateRandomNumbers(): IntArray {
     return numbers
 }
 
-fun getNumbersFromUser(): String {
+fun getNumbersFromUser(): IntArray {
     print("숫자를 입력해주세요: ")
-    return scanner.next()
+    val userNumbers = IntArray(3)
+    val inputNumbers = scanner.next()
+    for (i in 0..2)
+        userNumbers[i] = inputNumbers[i].digitToInt()
+    return userNumbers
 }
 
-fun compareNumbers(auto: IntArray, user: String): Boolean {
+fun compareNumbers(auto: IntArray, user: IntArray): Boolean {
     var strike = 0
     var ball = 0
 
     for (i in 0..2) {
-        if (user.indexOf("" + auto[i], i) == i)
+        if (auto[i] == user[i])
             strike++
-        else if (user.contains("" + auto[i]))
+        else if (user.contains(auto[i]))
             ball++
     }
     println("strike: $strike ball: $ball")
