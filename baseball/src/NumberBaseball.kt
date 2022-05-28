@@ -3,6 +3,8 @@ import java.util.*
 private val scanner = Scanner(System.`in`)
 
 private const val ARRAY_SIZE = 3
+private const val RESTART_CODE = 1
+private const val END_CODE = 2
 
 fun main() {
     while (true) {
@@ -70,7 +72,7 @@ fun getNumbersFromUser(): IntArray {
             // 중복값이 있는지 없는지 체크
 
             // 입력한 길이가 3이 아닌 경우 || 숫자인지 아닌지
-            if (!(checkInputDepth(inputNumbers)) || !(isNumbers(inputNumbers))) {
+            if (!(checkInputDepth(inputNumbers,ARRAY_SIZE)) || !(isNumbers(inputNumbers))) {
                 println("3자리 숫자를 입력해야 합니다.")
                 println()
                 continue
@@ -97,8 +99,8 @@ fun checkOverlap(inputNumbers: String): Boolean {
     return checkOverlap
 }
 
-fun checkInputDepth(inputNumbers: String): Boolean {
-    return inputNumbers.length == ARRAY_SIZE
+fun checkInputDepth(inputNumbers: String, inputSize: Int): Boolean {
+    return inputNumbers.length == inputSize
 }
 
 fun isNumbers(inputNumbers: String): Boolean {
@@ -136,7 +138,23 @@ fun countStrikeAndBall(generatedNumbers: IntArray, numbers: IntArray): IntArray 
 }
 
 fun isCoinInserted(): Boolean {
+    var isCoin = true
     println("숫자를 모두 맞히셨습니다! 게임종료")
-    println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요")
-    return scanner.nextInt() == 1
+    while (true){
+        println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요")
+        val inputNumber = scanner.nextLine()
+        if (!(checkInputDepth(inputNumber, 1)) || !(isNumbers(inputNumber))){
+            println("1 또는 2를 입력해야 합니다.")
+            continue
+        }
+        if (Integer.parseInt(inputNumber) == RESTART_CODE){
+            break
+        }else if(Integer.parseInt(inputNumber) == END_CODE){
+            isCoin = false
+            break
+        }else{
+            println("1 또는 2를 입력해야 합니다.")
+        }
+    }
+    return isCoin
 }
